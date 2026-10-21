@@ -1,15 +1,37 @@
-<!-- dashboard.html -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Library dashboard</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-    <h1>Dashboard</h1>
-    <p>Welcome to the Dashboard!</p>
+<body class="dashboard-page">
+    <nav class="app-nav">
+        <a class="brand" href="dashboard.html">LIBRARY<span>OS</span></a>
+        <ul>
+            <li><a class="active" href="dashboard.html">Dashboard</a></li>
+            <li><a href="book-search.html">Browse books</a></li>
+            <li><a href="issued-books.html">My loans</a></li>
+            <li><button class="link-button" id="logout-button" type="button">Log out</button></li>
+        </ul>
+    </nav>
+    <main class="dashboard-shell">
+        <header class="dashboard-header">
+            <div><p class="eyebrow">LIBRARY OVERVIEW</p><h1>Good to see you, <span id="user-name">reader</span>.</h1><p>Find your next book, keep track of loans, and stay ahead of due dates.</p></div>
+            <a class="button-link" href="book-search.html">Browse catalog <span aria-hidden="true">&gt;</span></a>
+        </header>
+        <section class="stat-grid" aria-label="Library summary">
+            <article class="stat-card"><span class="stat-icon blue">B</span><div><p>Books in catalog</p><strong id="total-books">-</strong></div></article>
+            <article class="stat-card"><span class="stat-icon green">+</span><div><p>Available copies</p><strong id="available-copies">-</strong></div></article>
+            <article class="stat-card"><span class="stat-icon amber">L</span><div><p>Books on loan</p><strong id="active-loans">-</strong></div></article>
+            <article class="stat-card"><span class="stat-icon rose">!</span><div><p>Due soon</p><strong id="due-soon">-</strong></div></article>
+        </section>
+        <section class="dashboard-columns">
+            <article class="panel"><div class="panel-heading"><div><p class="eyebrow">CATALOG</p><h2>Recently added books</h2></div><a href="book-search.html">View all</a></div><div id="recent-books" class="book-list"><p class="loading">Loading catalog...</p></div></article>
+            <article class="panel"><div class="panel-heading"><div><p class="eyebrow">YOUR LIBRARY</p><h2>Current loans</h2></div><a href="issued-books.html">View all</a></div><div id="current-loans" class="loan-list"><p class="loading">Loading loans...</p></div></article>
+        </section>
+    </main>
     <script src="js/script.js"></script>
 </body>
 </html>
