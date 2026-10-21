@@ -209,8 +209,25 @@ def create_app(test_config=None):
         try:
             with db.engine.connect() as connection:
                 connection.execute(text("SELECT 1"))
+                database_name = connection.execute(
+                    text("SELECT current_database()")
+                ).scalar_one()
 
-            return jsonify({"status": "ready"}), 200
+            existing_tables = set(inspect(db.engine).get_table_names())
+            missing_tables = sorted(required_tables - existing_tables)
+
+            if missing_tables:
+                return jsonify({
+                    "status": "database schema incomplete",
+                    "database": database_name,
+                    "missing_tables": missing_tables,
+                }), 503
+
+            return jsonify({
+                "status": "ready",
+                "database": database_name,
+                "tables": sorted(required_tables),
+            }), 200
 
         except SQLAlchemyError:
             app.logger.exception("Database readiness check failed.")
