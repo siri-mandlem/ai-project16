@@ -262,8 +262,45 @@
     ],
     "project_id": "project16"
   },
-  "deployment": {},
+  "deployment": {
+    "status": "deployed",
+    "neon": {
+      "success": true,
+      "connection_uri": "postgresql://neondb_owner:npg_BbAMsq7ESlN2@ep-cold-lab-b5p4aexk-pooler.c-7.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
+      "project_id": "",
+      "console_url": "https://console.neon.tech",
+      "tables": [
+        "appointments",
+        "book_issues",
+        "book_loans",
+        "books",
+        "fines",
+        "issues",
+        "medical_records",
+        "searches",
+        "users"
+      ],
+      "table_count": 9
+    },
+    "github": {
+      "repo_name": "ai-project16",
+      "repo_url": "https://github.com/siri-mandlem/ai-project16",
+      "clone_url": "https://github.com/siri-mandlem/ai-project16.git",
+      "owner": "siri-mandlem"
+    },
+    "render": {
+      "success": true,
+      "service_id": "srv-dbcc9tnf3r2c739irr2g",
+      "deploy_id": "dep-dbcc9tvf3r2c739irs5g",
+      "service_name": "ai-project16",
+      "url": "https://ai-project16.onrender.com",
+      "dashboard_url": "https://dashboard.render.com/web/srv-dbcc9tnf3r2c739irr2g"
+    },
+    "message": "Deployment is live at https://ai-project16.onrender.com",
+    "updated_at": "2026-10-21T13:59:05.263949+00:00",
+    "url": "https://ai-project16.onrender.com"
+  },
   "status": "partial",
   "created_at": "2026-10-21T13:16:16.723594+00:00",
-  "updated_at": "2026-10-21T13:39:59.938889+00:00"
+  "updated_at": "2026-10-21T13:59:05.266968+00:00"
 }
