@@ -1,0 +1,1 @@
+Frontend smoke flow: register -> login -> search -> issue -> return.

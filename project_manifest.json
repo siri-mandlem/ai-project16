@@ -1,0 +1,85 @@
+{
+  "manifest_version": 1,
+  "project_name": "functional_requirements",
+  "backend": {
+    "framework": "Flask",
+    "application": "backend.app:app",
+    "files": [
+      "backend/app.py",
+      "backend/config.py",
+      "backend/models.py",
+      "backend/requirements.txt",
+      "backend/routes.py"
+    ]
+  },
+  "frontend": {
+    "files": [
+      "frontend/book-issue.html",
+      "frontend/book-return.html",
+      "frontend/book-search.html",
+      "frontend/css/style.css",
+      "frontend/dashboard.html",
+      "frontend/fine-calculator.html",
+      "frontend/index.html",
+      "frontend/issued-books.html",
+      "frontend/js/script.js",
+      "frontend/login.html",
+      "frontend/register.html"
+    ],
+    "pages": [
+      "/",
+      "/book-issue",
+      "/book-return",
+      "/book-search",
+      "/dashboard",
+      "/fine-calculator",
+      "/issued-books",
+      "/login",
+      "/register"
+    ]
+  },
+  "database": {
+    "schema_file": "database/schema.sql",
+    "tables": [
+      "book_issues",
+      "books",
+      "book_issues",
+      "books",
+      "users",
+      "users"
+    ]
+  },
+  "api_contracts": [],
+  "dependencies": [
+    "Flask",
+    "Flask-SQLAlchemy",
+    "gunicorn",
+    "psycopg2-binary"
+  ],
+  "required_files": [
+    ".env.example",
+    "README.md",
+    "backend/__init__.py",
+    "backend/app.py",
+    "backend/config.py",
+    "backend/models.py",
+    "backend/requirements.txt",
+    "backend/routes.py",
+    "database/schema.sql",
+    "frontend/book-issue.html",
+    "frontend/book-return.html",
+    "frontend/book-search.html",
+    "frontend/css/style.css",
+    "frontend/dashboard.html",
+    "frontend/fine-calculator.html",
+    "frontend/index.html",
+    "frontend/issued-books.html",
+    "frontend/js/script.js",
+    "frontend/login.html",
+    "frontend/register.html",
+    "project_manifest.json",
+    "tests/test_smoke.py"
+  ],
+  "generation_status": "partial",
+  "generation_message": "Project code generation stopped at the 15-minute limit. The generated files were saved successfully; review and align the files before deploying."
+}

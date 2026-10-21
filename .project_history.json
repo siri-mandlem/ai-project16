@@ -1,0 +1,269 @@
+{
+  "project_id": "project16",
+  "title": "Create a Library Management System where admin can add books, issue and return b",
+  "prompt": "Create a Library Management System where admin can add books, issue and return books, students can search books and view issued books. Include login system and fine calculation for late returns. Provide complete code.",
+  "requirements": "## Functional Requirements\n- Admin can add books, issue, and return books.\n- Students can search for books and view their issued books.\n- Include login system for both admin and students.\n- Calculate fines for late book returns.\n\n## Non-Functional Requirements\n- Performance: Support quick search and issue/return operations.\n- Security: Ensure data integrity and protect user credentials.\n- Usability: Provide an intuitive interface for easy navigation and use.\n\n## Actors\n- Admin\n- Students\n\n## Modules\n- Book Management\n- User Authentication\n- Fine Calculation\n- Search and Issue/Return Books",
+  "architecture": {
+    "architecture_diagram": "graph LR\n\nAdmin --> UserAuthentication\n\nUserAuthentication --> BookManagement\n\nUserAuthentication --> FineCalculation\n\nUserAuthentication --> SearchAndIssueReturn\n\nBookManagement --> PostgreSQL\n\nFineCalculation --> PostgreSQL\n\nSearchAndIssueReturn --> PostgreSQL\n\nStudents --> UserAuthentication\n\nStudents --> SearchAndIssueReturn\n\nStudents --> PostgreSQL"
+  },
+  "database": {
+    "tables": [
+      {
+        "table_name": "users",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "primary_key": true,
+            "foreign_key": ""
+          },
+          {
+            "name": "username",
+            "type": "VARCHAR(100)",
+            "primary_key": false,
+            "foreign_key": ""
+          },
+          {
+            "name": "password",
+            "type": "VARCHAR(100)",
+            "primary_key": false,
+            "foreign_key": ""
+          },
+          {
+            "name": "role",
+            "type": "VARCHAR(50)",
+            "primary_key": false,
+            "foreign_key": ""
+          }
+        ]
+      },
+      {
+        "table_name": "books",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "primary_key": true,
+            "foreign_key": ""
+          },
+          {
+            "name": "title",
+            "type": "VARCHAR(200)",
+            "primary_key": false,
+            "foreign_key": ""
+          },
+          {
+            "name": "author",
+            "type": "VARCHAR(100)",
+            "primary_key": false,
+            "foreign_key": ""
+          },
+          {
+            "name": "status",
+            "type": "VARCHAR(50)",
+            "primary_key": false,
+            "foreign_key": ""
+          }
+        ]
+      },
+      {
+        "table_name": "book_issues",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "primary_key": true,
+            "foreign_key": "users.id"
+          },
+          {
+            "name": "user_id",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": "users.id"
+          },
+          {
+            "name": "book_id",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": "books.id"
+          },
+          {
+            "name": "issue_date",
+            "type": "DATE",
+            "primary_key": false,
+            "foreign_key": ""
+          },
+          {
+            "name": "return_date",
+            "type": "DATE",
+            "primary_key": false,
+            "foreign_key": ""
+          },
+          {
+            "name": "fine_amount",
+            "type": "DECIMAL",
+            "primary_key": false,
+            "foreign_key": ""
+          }
+        ]
+      },
+      {
+        "table_name": "fines",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "primary_key": true,
+            "foreign_key": ""
+          },
+          {
+            "name": "issue_id",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": "book_issues.id"
+          },
+          {
+            "name": "fine_amount",
+            "type": "DECIMAL",
+            "primary_key": false,
+            "foreign_key": ""
+          }
+        ]
+      },
+      {
+        "table_name": "search_results",
+        "columns": [
+          {
+            "name": "id",
+            "type": "SERIAL",
+            "primary_key": true,
+            "foreign_key": ""
+          },
+          {
+            "name": "user_id",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": "users.id"
+          },
+          {
+            "name": "book_id",
+            "type": "INT",
+            "primary_key": false,
+            "foreign_key": "books.id"
+          },
+          {
+            "name": "search_date",
+            "type": "DATE",
+            "primary_key": false,
+            "foreign_key": ""
+          }
+        ]
+      }
+    ],
+    "erd": "erDiagram\n\nUSERS {\n        int id PK\n        string username\n        string password\n        string role\n}\n\nBOOKS {\n        int id PK\n        string title\n        string author\n        string status\n}\n\nBOOK_ISSUES {\n        int id PK\n        int user_id FK\n        int book_id FK\n        datetime issue_date\n        datetime return_date\n        float fine_amount\n}\n\nFINES {\n        int id PK\n        int issue_id FK\n        float fine_amount\n}\n\nSEARCH_RESULTS {\n        int id PK\n        int user_id FK\n        int book_id FK\n        datetime search_date\n}\n\nUSERS ||--o{ BOOK_ISSUES : id\n\nUSERS ||--o{ BOOK_ISSUES : user_id\n\nBOOKS ||--o{ BOOK_ISSUES : book_id\n\nBOOK_ISSUES ||--o{ FINES : issue_id\n\nUSERS ||--o{ SEARCH_RESULTS : user_id\n\nBOOKS ||--o{ SEARCH_RESULTS : book_id",
+    "sql_schema": "CREATE TABLE \"users\" (\n    \"id\" SERIAL,\n    \"username\" VARCHAR(100),\n    \"password\" VARCHAR(100),\n    \"role\" VARCHAR(50),\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"books\" (\n    \"id\" SERIAL,\n    \"title\" VARCHAR(200),\n    \"author\" VARCHAR(100),\n    \"status\" VARCHAR(50),\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"book_issues\" (\n    \"id\" SERIAL,\n    \"user_id\" INT,\n    \"book_id\" INT,\n    \"issue_date\" DATE,\n    \"return_date\" DATE,\n    \"fine_amount\" DECIMAL,\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"fines\" (\n    \"id\" SERIAL,\n    \"issue_id\" INT,\n    \"fine_amount\" DECIMAL,\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"search_results\" (\n    \"id\" SERIAL,\n    \"user_id\" INT,\n    \"book_id\" INT,\n    \"search_date\" DATE,\n    PRIMARY KEY (\"id\")\n);\n\nALTER TABLE \"book_issues\" ADD FOREIGN KEY (\"id\") REFERENCES \"users\" (\"id\");\n\nALTER TABLE \"book_issues\" ADD FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\");\n\nALTER TABLE \"book_issues\" ADD FOREIGN KEY (\"book_id\") REFERENCES \"books\" (\"id\");\n\nALTER TABLE \"fines\" ADD FOREIGN KEY (\"issue_id\") REFERENCES \"book_issues\" (\"id\");\n\nALTER TABLE \"search_results\" ADD FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\");\n\nALTER TABLE \"search_results\" ADD FOREIGN KEY (\"book_id\") REFERENCES \"books\" (\"id\");"
+  },
+  "backend": {
+    "structure": "1. **Backend Technology Stack**\n   - **Database**: PostgreSQL\n   - **ORM/Framework**: Django (or similar)\n   - **Web Framework**: FastAPI (or similar)\n   - **Authentication**: JWT (JSON Web Tokens)\n   - **ORM**: SQLAlchemy (or similar)\n   - **Database Connection**: psycopg2 (or similar)\n   - **Testing**: pytest (or similar)\n   - **Logging**: logging (or similar)\n   - **Security**: bcrypt (or similar) for password hashing\n   - **Database Transactions**: SQLAlchemy\n   - **Database ORM**: SQLAlchemy\n   - **Database Connection**: psycopg2\n   - **Database Transactions**: SQLAlchemy\n   - **Database ORM**: SQLAlchemy\n   - **Database Connection**: psycopg2\n\n2. **Backend Folder Structure**\n   ```\n   backend/\n   ├── config/\n   │   ├── settings.py\n   │   └── secrets.py\n   ├── migrations/\n   ├── models/\n   ├── serializers/\n   ├── services/\n   │   ├── admin_service.py\n   │   ├── book_service.py\n   │   ├── fine_service.py\n   │   ├── search_service.py\n   │   └── user_service.py\n   ├── tests/\n   ├── utils/\n   │   ├── jwt_utils.py\n   │   └── database_utils.py\n   ├── views/\n   │   ├── admin_views.py\n   │   ├── book_views.py\n   │   ├── fine_views.py\n   │   ├── search_views.py\n   │   └── user_views.py\n   ├── __init__.py\n   └── requirements.txt\n   ```\n\n3. **Backend Modules**\n   - **config**: Configuration files for settings and secrets.\n   - **migrations**: Directory for database migrations.\n   - **models**: Models for database tables.\n   - **serializers**: Serializers for API responses.\n   - **services**: Service classes for business logic.\n   - **tests**: Unit tests for services and views.\n   - **utils**: Utility functions for common tasks.\n   - **views**: View classes for API endpoints.\n   - **config**: Configuration files for settings and secrets.\n   - **migrations**: Directory for database migrations.\n   - **models**: Models for database tables.\n   - **serializers**: Serializers for API responses.\n   - **services**: Service classes for business logic.\n   - **tests**: Unit tests for services and views.\n   - **utils**: Utility functions for common tasks.\n   - **views**: View classes for API endpoints."
+  },
+  "frontend": {
+    "tech_stack": "Frontend Technology Stack:\n- HTML\n- CSS\n- JavaScript",
+    "structure": "1. Frontend Technology Stack\n   - **Frontend Framework**: React.js\n   - **State Management**: Redux\n   - **Authentication**: JWT\n   - **UI Library**: Material-UI\n   - **Testing**: Jest, Enzyme\n   - **Linting**: ESLint\n   - **Code Coverage**: Istanbul\n   - **Database Integration**: Axios\n   - **Form Handling**: Formik\n   - **UI Components**: Material-UI\n   - **Authentication**: JWT\n   - **UI Library**: Material-UI\n   - **Testing**: Jest, Enzyme\n   - **Linting**: ESLint\n   - **Code Coverage**: Istanbul\n   - **Database Integration**: Axios\n   - **Form Handling**: Formik\n\n2. Frontend Folder Structure\n   ```\n   frontend/\n   ├── public/\n   │   └── index.html\n   ├── src/\n   │   ├── components/\n   │   │   ├── Admin/\n   │   │   │   ├── AdminAddBook.js\n   │   │   │   ├── AdminIssueBook.js\n   │   │   │   ├── AdminReturnBook.js\n   │   │   │   └── AdminSearchBooks.js\n   │   │   ├── Student/\n   │   │   │   ├── StudentSearchBooks.js\n   │   │   │   ├── StudentViewBooks.js\n   │   │   │   └── StudentIssueBook.js\n   │   │   └── common/\n   │   │       ├── Navbar.js\n   │   │       ├── Footer.js\n   │   │       └── Loader.js\n   │   ├── context/\n   │   │   ├── AuthContext.js\n   │   │   └── BookContext.js\n   │   ├── hooks/\n   │   │   ├── useAuth.js\n   │   │   └── useBook.js\n   │   ├── services/\n   │   │   ├── authService.js\n   │   │   ├── bookService.js\n   │   │   └── fineService.js\n   │   ├── utils/\n   │   │   ├── jwtUtils.js\n   │   │   └── databaseUtils.js\n   │   ├── views/\n   │   │   ├── Admin/\n   │   │   │   ├── AdminAddBook.js\n   │   │   │   ├── AdminIssueBook.js\n   │   │   │   ├── AdminReturnBook.js\n   │   │   │   └── AdminSearchBooks.js\n   │   │   ├── Student/\n   │   │   │   ├── StudentSearchBooks.js\n   │   │   │   ├── StudentViewBooks.js\n   │   │   │   └── StudentIssueBook.js\n   │   │   └── common/\n   │   │       ├── AdminNavbar.js\n   │   │       ├── AdminFooter.js\n   │   │       └── StudentNavbar.js\n   │   ├── App.js\n   │   ├── index.js\n   │   └── App.css\n   ├── config/\n   │   ├── environment.js\n   │   └── api.js\n   ├── tests/\n   │   ├── unit/\n   │   │   ├── Admin/\n   │   │   │   ├── AdminAddBook.test.js\n   │   │   │   ├── AdminIssueBook.test.js\n   │   │   │   ├── AdminReturnBook.test.js\n   │   │   │   └── AdminSearchBooks.test.js\n   │   │   ├── Student/\n   │   │   │   ├── StudentSearchBooks.test.js\n   │   │   │   ├── StudentViewBooks.test.js\n   │   │   │   └── StudentIssueBook.test.js\n   │   │   └── common/\n   │   │       ├── AdminNavbar.test.js\n   │   │       ├── AdminFooter.test.js\n   │   │       └── StudentNavbar.test.js\n   │   └── e2e/\n   │       ├── Admin/\n   │       │   ├── AdminAddBook.e2e.js\n   │       │   ├── AdminIssueBook.e2e.js\n   │       │   ├── AdminReturnBook.e2e.js\n   │       │   └── AdminSearchBooks.e2e.js\n   │       ├── Student/\n   │       │   ├── StudentSearchBooks.e2e.js\n   │       │   ├── StudentViewBooks.e2e.js\n   │       │   └── StudentIssueBook.e2e.js\n   │       └── common/\n   │           ├── AdminNavbar.e2e.js\n   │           ├── AdminFooter.e2e.js\n   │           └── StudentNavbar.e2e.js\n   ├── package.json\n   ├── README.md\n   ```\n\n3. Frontend Pages\n   - **Admin Pages**\n     - **AdminAddBook**: Add a new book to the library.\n     - **AdminIssueBook**: Issue a book to a student.\n     - **AdminReturnBook**: Return a book by a student.\n     - **AdminSearchBooks**: Search for books.\n   - **Student Pages**\n     - **StudentSearchBooks**: Search for books.\n     - **StudentViewBooks**: View issued books.\n     - **StudentIssueBook**: Issue a book to the library.",
+    "pages": "1. login.html\n2. register.html\n3. dashboard.html\n4. book-search.html\n5. issued-books.html\n6. book-issue.html\n7. book-return.html\n8. fine-calculator.html"
+  },
+  "project": {
+    "success": true,
+    "partial": true,
+    "message": "Project code generation stopped at the 15-minute limit. The generated files were saved successfully; review and align the files before deploying.",
+    "project_path": "D:\\html.siri\\AI-Software-Engineering-Platform\\generated_projects\\project16",
+    "backend_generated": true,
+    "frontend_generated": true,
+    "files": [
+      {
+        "name": "app.py",
+        "path": "backend/app.py",
+        "content": "from flask import Flask, jsonify, request\nfrom backend.routes import routes\nfrom backend.models import db\n\napp = Flask(__name__)\napp.register_blueprint(routes)\n\n@app.route('/')\ndef index():\n    return \"Welcome to the main page!\"\n\nif __name__ == '__main__':\n    app.run(debug=True)\n"
+      },
+      {
+        "name": "config.py",
+        "path": "backend/config.py",
+        "content": "import os\n\nbasedir = os.path.abspath(os.path.dirname(__file__))\n\nclass Config:\n    SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'\n    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \\\n        'sqlite:///' + os.path.join(basedir, 'app.db')\n    SQLALCHEMY_TRACK_MODIFICATIONS = False\n"
+      },
+      {
+        "name": "models.py",
+        "path": "backend/models.py",
+        "content": "from flask_sqlalchemy import SQLAlchemy\nfrom backend.config import SQLALCHEMY_DATABASE_URI\n\ndb = SQLAlchemy()\n\nclass User(db.Model):\n    id = db.Column(db.Integer, primary_key=True)\n    username = db.Column(db.String(80), unique=True, nullable=False)\n    password = db.Column(db.String(120), nullable=False)\n\nclass Book(db.Model):\n    id = db.Column(db.Integer, primary_key=True)\n    title = db.Column(db.String(120), nullable=False)\n    author = db.Column(db.String(120), nullable=False)\n\nclass Fine(db.Model):\n    id = db.Column(db.Integer, primary_key=True)\n    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)\n    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)\n    amount = db.Column(db.Float, nullable=False)\n\nclass SearchResult(db.Model):\n    id = db.Column(db.Integer, primary_key=True)\n    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)\n    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)\n    title = db.Column(db.String(120), nullable=False)\n    author = db.Column(db.String(120), nullable=False)\n    issued_date = db.Column(db.DateTime, nullable=False)\n    due_date = db.Column(db.DateTime, nullable=False)\n"
+      },
+      {
+        "name": "requirements.txt",
+        "path": "backend/requirements.txt",
+        "content": "Flask==2.0.1\nFlask-SQLAlchemy==2.5.1\npsycopg2-binary==2.8.6\ngunicorn\ngunicorn\n"
+      },
+      {
+        "name": "routes.py",
+        "path": "backend/routes.py",
+        "content": "from flask import Blueprint, jsonify, request\nfrom backend.models import db, User, Book, Fine, SearchResult\nfrom backend import app\n\nroutes = Blueprint('routes', __name__)\n\n@routes.route('/users', methods=['POST'])\ndef create_user():\n    data = request.get_json()\n    user = User(username=data['username'], password=data['password'])\n    db.session.add(user)\n    db.session.commit()\n    return jsonify({'message': 'User created successfully'}), 201\n\n@routes.route('/books', methods=['POST'])\ndef create_book():\n    data = request.get_json()\n    book = Book(title=data['title'], author=data['author'])\n    db.session.add(book)\n    db.session.commit()\n    return jsonify({'message': 'Book created successfully'}), 201\n\n@routes.route('/fines', methods=['POST'])\ndef create_fine():\n    data = request.get_json()\n    fine = Fine(user_id=data['user_id'], book_id=data['book_id'], amount=data['amount'])\n    db.session.add(fine)\n    db.session.commit()\n    return jsonify({'message': 'Fine created successfully'}), 201\n\n@routes.route('/search_results', methods=['POST'])\ndef create_search_result():\n    data = request.get_json()\n    search_result = SearchResult(user_id=data['user_id'], book_id=data['book_id'], title=data['title'], author=data['author'], issued_date=data['issued_date'], due_date=data['due_date'])\n    db.session.add(search_result)\n    db.session.commit()\n    return jsonify({'message': 'Search result created successfully'}), 201\n"
+      },
+      {
+        "name": "schema.sql",
+        "path": "database/schema.sql",
+        "content": "CREATE TABLE \"users\" (\n    \"id\" SERIAL,\n    \"username\" VARCHAR(100),\n    \"password\" VARCHAR(100),\n    \"role\" VARCHAR(50),\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"books\" (\n    \"id\" SERIAL,\n    \"title\" VARCHAR(200),\n    \"author\" VARCHAR(100),\n    \"status\" VARCHAR(50),\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"book_issues\" (\n    \"id\" SERIAL,\n    \"user_id\" INT,\n    \"book_id\" INT,\n    \"issue_date\" DATE,\n    \"return_date\" DATE,\n    \"fine_amount\" DECIMAL,\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"fines\" (\n    \"id\" SERIAL,\n    \"issue_id\" INT,\n    \"fine_amount\" DECIMAL,\n    PRIMARY KEY (\"id\")\n);\n\nCREATE TABLE \"search_results\" (\n    \"id\" SERIAL,\n    \"user_id\" INT,\n    \"book_id\" INT,\n    \"search_date\" DATE,\n    PRIMARY KEY (\"id\")\n);\n\nALTER TABLE \"book_issues\" ADD FOREIGN KEY (\"id\") REFERENCES \"users\" (\"id\");\n\nALTER TABLE \"book_issues\" ADD FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\");\n\nALTER TABLE \"book_issues\" ADD FOREIGN KEY (\"book_id\") REFERENCES \"books\" (\"id\");\n\nALTER TABLE \"fines\" ADD FOREIGN KEY (\"issue_id\") REFERENCES \"book_issues\" (\"id\");\n\nALTER TABLE \"search_results\" ADD FOREIGN KEY (\"user_id\") REFERENCES \"users\" (\"id\");\n\nALTER TABLE \"search_results\" ADD FOREIGN KEY (\"book_id\") REFERENCES \"books\" (\"id\");\n"
+      },
+      {
+        "name": "book-issue.html",
+        "path": "frontend/book-issue.html",
+        "content": "<!-- book-issue.html -->\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Issue Book</title>\n    <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n    <h1>Issue Book</h1>\n    <form id=\"issue-form\">\n        <label for=\"book-id\">Book ID:</label>\n        <input type=\"text\" id=\"book-id\" name=\"book-id\" required>\n        <label for=\"student-id\">Student ID:</label>\n        <input type=\"text\" id=\"student-id\" name=\"student-id\" required>\n        <button type=\"submit\">Issue Book</button>\n    </form>\n    <script src=\"js/script.js\"></script>\n</body>\n</html>\n"
+      },
+      {
+        "name": "style.css",
+        "path": "frontend/css/style.css",
+        "content": "body {\n    font-family: Arial, sans-serif;\n    margin: 0;\n    padding: 0;\n    background-color: #f4f4f4;\n}\n\nnav {\n    background-color: #333;\n    color: white;\n    padding: 10px;\n}\n\nnav ul {\n    list-style-type: none;\n    padding: 0;\n}\n\nnav ul li {\n    display: inline;\n    margin-right: 10px;\n}\n\nnav ul li a {\n    color: white;\n    text-decoration: none;\n}\n\nnav ul li a:hover {\n    text-decoration: underline;\n}\n\nmain {\n    padding: 20px;\n    background-color: white;\n    margin-top: 20px;\n}\n"
+      },
+      {
+        "name": "dashboard.html",
+        "path": "frontend/dashboard.html",
+        "content": "<!-- dashboard.html -->\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Dashboard</title>\n    <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n    <h1>Dashboard</h1>\n    <p>Welcome to the Dashboard!</p>\n    <script src=\"js/script.js\"></script>\n</body>\n</html>\n"
+      },
+      {
+        "name": "fine-calculator.html",
+        "path": "frontend/fine-calculator.html",
+        "content": "<!-- fine-calculator.html -->\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Fine Calculator</title>\n    <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n    <h1>Fine Calculator</h1>\n    <form id=\"fine-form\">\n        <label for=\"book-id\">Book ID:</label>\n        <input type=\"text\" id=\"book-id\" name=\"book-id\" required>\n"
+      },
+      {
+        "name": "index.html",
+        "path": "frontend/index.html",
+        "content": "<!-- index.html -->\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Functional Requirements</title>\n    <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n    <h1>Welcome to Functional Requirements</h1>\n    <nav>\n        <ul>\n            <li><a href=\"/\">Home</a></li>\n            <li><a href=\"/book-issue\">Issue Book</a></li>\n            <li><a href=\"/dashboard\">Dashboard</a></li>\n            <li><a href=\"/fine-calculator\">Fine Calculator</a></li>\n        </ul>\n    </nav>\n    <main>\n        <p>This is the main content of the application.</p>\n    </main>\n    <script src=\"js/script.js\"></script>\n</body>\n</html>\n"
+      },
+      {
+        "name": "issued-books.html",
+        "path": "frontend/issued-books.html",
+        "content": "<!-- issued-books.html -->\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Issued Books</title>\n    <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n    <h1>Issued Books</h1>\n    <table>\n        <thead>\n            <tr>\n                <th>Book ID</th>\n                <th>Student ID</th>\n                <th>Issued Date</th>\n                <th>Due Date</th>\n            </tr>\n        </thead>\n        <tbody>\n            {% for book in issued_books %}\n            <tr>\n                <td>{{ book.id }}</td>\n                <td>{{ book.student_id }}</td>\n                <td>{{ book.issued_date }}</td>\n                <td>{{ book.due_date }}</td>\n            </tr>\n            {% endfor %}\n        </tbody>\n    </table>\n    <script src=\"js/script.js\"></script>\n</body>\n</html>\n"
+      },
+      {
+        "name": "script.js",
+        "path": "frontend/js/script.js",
+        "content": "document.getElementById('issue-form').addEventListener('submit', function(event) {\n    event.preventDefault();\n    const formData = new FormData(event.target);\n    fetch('/books', {\n        method: 'POST',\n        body: formData\n    })\n    .then(response => response.json())\n    .then(data => {\n        if (data.message) {\n            alert(data.message);\n        } else {\n            alert('Book issued successfully');\n        }\n    });\n});\n\ndocument.getElementById('fine-form').addEventListener('submit', function(event) {\n    event.preventDefault();\n    const formData = new FormData(event.target);\n    fetch('/fines', {\n        method: 'POST',\n        body: formData\n    })\n    .then(response => response.json())\n    .then(data => {\n        if (data.message) {\n            alert(data.message);\n        } else {\n            alert('Fine calculated successfully');\n        }\n    });\n});\n"
+      },
+      {
+        "name": "login.html",
+        "path": "frontend/login.html",
+        "content": "<!-- login.html -->\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Login</title>\n    <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n    <h1>Login</h1>\n    <form id=\"login-form\">\n        <label for=\"username\">Username:</label>\n        <input type=\"text\" id=\"username\" name=\"username\" required>\n        <label for=\"password\">Password:</label>\n        <input type=\"password\" id=\"password\" name=\"password\" required>\n        <button type=\"submit\">Login</button>\n    </form>\n    <script src=\"js/script.js\"></script>\n</body>\n</html>\n"
+      },
+      {
+        "name": "register.html",
+        "path": "frontend/register.html",
+        "content": "<!-- register.html -->\n<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Register</title>\n    <link rel=\"stylesheet\" href=\"css/style.css\">\n</head>\n<body>\n    <h1>Register</h1>\n    <form id=\"register-form\">\n        <label for=\"username\">Username:</label>\n        <input type=\"text\" id=\"username\" name=\"username\" required>\n        <label for=\"password\">Password:</label>\n        <input type=\"password\" id=\"password\" name=\"password\" required>\n        <button type=\"submit\">Register</button>\n    </form>\n    <script src=\"js/script.js\"></script>\n</body>\n</html>\n"
+      },
+      {
+        "name": "project_manifest.json",
+        "path": "project_manifest.json",
+        "content": "{\n  \"manifest_version\": 1,\n  \"project_name\": \"functional_requirements\",\n  \"backend\": {\n    \"framework\": \"Flask\",\n    \"application\": \"backend.app:app\",\n    \"files\": [\n      \"backend/app.py\",\n      \"backend/config.py\",\n      \"backend/models.py\",\n      \"backend/requirements.txt\",\n      \"backend/routes.py\"\n    ]\n  },\n  \"frontend\": {\n    \"files\": [\n      \"frontend/book-issue.html\",\n      \"frontend/book-return.html\",\n      \"frontend/book-search.html\",\n      \"frontend/css/style.css\",\n      \"frontend/dashboard.html\",\n      \"frontend/fine-calculator.html\",\n      \"frontend/index.html\",\n      \"frontend/issued-books.html\",\n      \"frontend/js/script.js\",\n      \"frontend/login.html\",\n      \"frontend/register.html\"\n    ],\n    \"pages\": [\n      \"/\",\n      \"/book-issue\",\n      \"/book-return\",\n      \"/book-search\",\n      \"/dashboard\",\n      \"/fine-calculator\",\n      \"/issued-books\",\n      \"/login\",\n      \"/register\"\n    ]\n  },\n  \"database\": {\n    \"schema_file\": \"database/schema.sql\",\n    \"tables\": [\n      \"book_issues\",\n      \"books\",\n      \"fines\",\n      \"search_results\",\n      \"users\"\n    ]\n  },\n  \"api_contracts\": [],\n  \"dependencies\": [\n    \"Flask\",\n    \"Flask-SQLAlchemy\",\n    \"gunicorn\",\n    \"psycopg2-binary\"\n  ],\n  \"required_files\": [\n    \".env.example\",\n    \"README.md\",\n    \"backend/__init__.py\",\n    \"backend/app.py\",\n    \"backend/config.py\",\n    \"backend/models.py\",\n    \"backend/requirements.txt\",\n    \"backend/routes.py\",\n    \"database/schema.sql\",\n    \"frontend/book-issue.html\",\n    \"frontend/book-return.html\",\n    \"frontend/book-search.html\",\n    \"frontend/css/style.css\",\n    \"frontend/dashboard.html\",\n    \"frontend/fine-calculator.html\",\n    \"frontend/index.html\",\n    \"frontend/issued-books.html\",\n    \"frontend/js/script.js\",\n    \"frontend/login.html\",\n    \"frontend/register.html\",\n    \"project_manifest.json\",\n    \"tests/test_smoke.py\"\n  ],\n  \"generation_status\": \"partial\",\n  \"generation_message\": \"Project code generation stopped at the 15-minute limit. The generated files were saved successfully; review and align the files before deploying.\"\n}\n"
+      }
+    ],
+    "project_id": "project16"
+  },
+  "deployment": {},
+  "status": "partial",
+  "created_at": "2026-10-21T13:16:16.723594+00:00",
+  "updated_at": "2026-10-21T13:39:59.938889+00:00"
+}
