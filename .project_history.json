@@ -263,7 +263,7 @@
     "project_id": "project16"
   },
   "deployment": {
-    "status": "deployed",
+    "status": "failed",
     "neon": {
       "success": true,
       "connection_uri": "postgresql://neondb_owner:npg_BbAMsq7ESlN2@ep-cold-lab-b5p4aexk-pooler.c-7.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
@@ -296,11 +296,11 @@
       "url": "https://ai-project16.onrender.com",
       "dashboard_url": "https://dashboard.render.com/web/srv-dbcc9tnf3r2c739irr2g"
     },
-    "message": "Deployment is live at https://ai-project16.onrender.com",
-    "updated_at": "2026-10-21T14:26:52.064050+00:00",
+    "message": "Render deployment failed with status 'update_failed'. View build logs in the Render dashboard: https://dashboard.render.com/web/srv-dbcc9tnf3r2c739irr2g\nRecent Render app output:\n\u001b[32m\u001b[1m==>\u001b(B\u001b[m \u001b[1mRunning 'gunicorn --bind 0.0.0.0:$PORT backend.app:app'\u001b(B\u001b[m\n\u001b[0;34m\u001b[1m==> \u001b[0m\u001b[1mCommon ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys\u001b[0m\n\u001b[0;31m\u001b[1m==> Exited with status 1\u001b[0m\nModuleNotFoundError: No module named 'psycopg2'\n    import psycopg2\n  File \"/opt/render/project/src/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/psycopg2.py\", line 691, in import_dbapi\n            ^^^^^^^^^^^^^^^^^^^^^^^^\n    dbapi = dbapi_meth(**dbapi_args)\n  File \"/opt/render/project/src/.venv/lib/python3.11/site-packages/sqlalchemy/engine/create.py\", line 602, in create_engine\n           ^^^^^^^^^^^^^^^^^^^\n    return fn(*args, **kwargs)  # type: ignore[no-any-return]\n  File \"/opt/render/project/src/.venv/lib/python3.11/site-packages/sqlalchemy/util/deprecations.py\", line 281, in warned\n  File \"<sqlalchemy generated warned() wrapper for sqlalchemy.engine.create.create_engine>\", line 2, in create_engine\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    return create_engine(url, **options)\n  File \"/opt/render/project/src/.venv/lib/python3.11/site-packages/sqlalchemy/engine/create.py\", line 832, in engine_from_config\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    return sa.engine_from_config(options, prefix=\"\")\n  File \"/opt/render/project/src/.venv/lib/python3.11/site-packages/flask_sqlalchemy/extension.py\", line 665, in _make_engine\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRecent Render build output:\n\u001b[32;1m==>\u001b[0;22m \u001b[1mBuild successful 🎉\u001b[22m\n\u001b[34;1m==>\u001b[0;22m \u001b[1mUploaded in 2.3s. Compression took 1.2s\u001b[22m\n\u001b[34;1m==>\u001b[0;22m \u001b[1mUploading build...\u001b[22m\n[notice] To update, run: pip install --upgrade pip\n[notice] A new release of pip is available: 24.0 -> 26.2.2\nSuccessfully installed Flask-3.1.0 Flask-Cors-5.0.0 Flask-SQLAlchemy-3.1.1 Jinja2-3.1.6 MarkupSafe-3.0.4 Werkzeug-3.1.9 blinker-1.9.0 click-8.5.0 gunicorn-23.0.0 itsdangerous-2.2.0 packaging-26.3 psycopg-3.2.3 psycopg-binary-3.2.3 python-dotenv-1.0.1 sqlalchemy-2.1.5 typing-extensions-4.16.0\nInstalling collected packages: typing-extensions, python-dotenv, psycopg-binary, packaging, MarkupSafe, itsdangerous, click, blinker, Werkzeug, sqlalchemy, psycopg, Jinja2, gunicorn, Flask, Flask-SQLAlchemy, Flask-Cors\nDownloading markupsafe-3.0.4-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)\n   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 130.0/130.0 kB 74.5 MB/s eta 0:00:00\nDownloading packaging-26.3-py3-none-any.whl (129 kB)\n   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 228.7/228.7 kB 118.9 MB/s eta 0:00:00\nDownloading werkzeug-3.1.9-py3-none-any.whl (228 kB)\n   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 kB 26.0 MB/s eta 0:00:00\nDownloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)\n   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 269.3 MB/s eta 0:00:00\nDownloading sqlalchemy-2.1.5-cp311-cp311-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (4.7 MB)\n   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 69.0 MB/s eta 0:00:00\nDownloading jinja2-3.1.6-py3-none-any.whl (134 kB)\nDownloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)",
+    "updated_at": "2026-10-21T15:07:35.133564+00:00",
     "url": "https://ai-project16.onrender.com"
   },
   "status": "partial",
   "created_at": "2026-10-21T13:16:16.723594+00:00",
-  "updated_at": "2026-10-21T14:26:52.064050+00:00"
+  "updated_at": "2026-10-21T15:07:35.137752+00:00"
 }

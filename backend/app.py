@@ -37,12 +37,13 @@ def get_database_url():
             "in .env or Render environment variables."
         )
 
+    
     url = make_url(database_url)
 
     if url.drivername in ("postgres", "postgresql"):
-        url = url.set(drivername="postgresql+psycopg2")
+        url = url.set(drivername="postgresql+psycopg")
 
-    if url.drivername != "postgresql+psycopg2":
+    if url.drivername != "postgresql+psycopg":
         raise RuntimeError(
             "This application requires PostgreSQL. "
             "Check your DATABASE_URL."
@@ -52,6 +53,7 @@ def get_database_url():
         url = url.update_query_dict({"sslmode": "require"})
 
     return url.render_as_string(hide_password=False)
+
 
 
 def initialize_database(app):
