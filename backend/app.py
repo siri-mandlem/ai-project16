@@ -55,6 +55,46 @@ def get_database_url():
     return url.render_as_string(hide_password=False)
 
 
+def migrate_legacy_books_schema(app):
+    """Add and populate available_copies for databases created by older versions."""
+    with db.engine.begin() as connection:
+        connection.execute(
+            text(
+                "ALTER TABLE books "
+                "ADD COLUMN IF NOT EXISTS available_copies INTEGER"
+            )
+        )
+        result = connection.execute(
+            text(
+                """
+                UPDATE books AS book
+                SET available_copies = GREATEST(
+                    book.total_copies - (
+                        SELECT COUNT(*)
+                        FROM book_issues AS issue
+                        WHERE issue.book_id = book.id
+                          AND issue.returned_at IS NULL
+                    ),
+                    0
+                )
+                WHERE book.available_copies IS NULL
+                """
+            )
+        )
+        connection.execute(
+            text(
+                "ALTER TABLE books "
+                "ALTER COLUMN available_copies SET NOT NULL"
+            )
+        )
+
+    if result.rowcount:
+        app.logger.info(
+            "Migrated available_copies for %s existing book(s).",
+            result.rowcount,
+        )
+
+
 
 def initialize_database(app):
     """Connect to PostgreSQL, create missing tables, and verify them."""
@@ -74,6 +114,9 @@ def initialize_database(app):
 
             # Create any tables missing from the database.
             db.create_all()
+
+            # db.create_all() does not add columns to existing tables.
+            migrate_legacy_books_schema(app)
 
             # Verify that the required tables exist.
             inspector = inspect(db.engine)
